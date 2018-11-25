@@ -1,5 +1,16 @@
-apply plugin: 'java'
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+    }
+}
 
+plugins {
+    id 'java'
+    id "com.github.johnrengelman.shadow" version "4.0.2"
+}
 group = pluginGroup
 version = pluginVersion
 
@@ -20,7 +31,7 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile 'org.spigotmc:spigot-api:1.9-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot-api:1.12-R0.1-SNAPSHOT'
     compile group: 'com.google.inject', name: 'guice', version: '4.0'
     compileOnly 'org.projectlombok:lombok:1.18.4'
 }
@@ -31,4 +42,7 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         filter ReplaceTokens, tokens: [version: version]
     }
+}
+shadowJar {
+    minimize()
 }
