@@ -2,3 +2,4 @@ name: Tribal
 version: @version@
 main: me.bristermitten.tribal.Tribal
 authors: [BristerMitten]
+depend: [KnightzAPI]

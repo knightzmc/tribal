@@ -1,6 +1,5 @@
 package me.bristermitten.tribal.world;
 
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
@@ -18,14 +17,15 @@ public class TribalWorldGenerator extends ChunkGenerator {
 
         for (int X = 0; X < 16; X++)
             for (int Z = 0; Z < 16; Z++) {
-                currentHeight = (int) ((generator.noise((chunkX << 4) + X, (chunkZ << 4) + Z, 0.5D, 0.5D, true) + 1) * 15D + 50D);
-                if (random.nextBoolean())
-                    chunk.setBlock(X, currentHeight, Z, Material.DIAMOND_BLOCK);
-                else chunk.setBlock(X, currentHeight, Z, Material.AIR);
-                chunk.setBlock(X, currentHeight - 1, Z, Material.DIRT);
-                for (int i = currentHeight - 2; i > 0; i--)
-                    chunk.setBlock(X, i, Z, Material.STONE);
-                chunk.setBlock(X, 0, Z, Material.BEDROCK);
+//                currentHeight = (int) ((generator.noise((chunkX << 4) + X, (chunkZ << 4) + Z, 0.5D, 0.5D, true) + 1) * 15D + 50D);
+//                if (random.nextBoolean())
+//                    chunk.setBlock(X, currentHeight, Z, Material.DIAMOND_BLOCK);
+//                else chunk.setBlock(X, currentHeight, Z, Material.AIR);
+//                chunk.setBlock(X, currentHeight - 1, Z, Material.DIRT);
+//                for (int i = currentHeight - 2; i > 0; i--)
+//                    chunk.setBlock(X, i, Z, Material.STONE);
+//                chunk.setBlock(X, 0, Z, Material.BEDROCK);
+
             }
         return chunk;
     }

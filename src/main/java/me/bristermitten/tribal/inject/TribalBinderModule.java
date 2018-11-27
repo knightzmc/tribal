@@ -3,8 +3,9 @@ package me.bristermitten.tribal.inject;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import me.bristermitten.tribal.game.Game;
 import me.bristermitten.tribal.Tribal;
-import me.bristermitten.tribal.data.player.TribalPlayers;
+import me.bristermitten.tribal.data.SavedData;
 import me.bristermitten.tribal.io.Config;
 
 public class TribalBinderModule extends AbstractModule {
@@ -13,11 +14,16 @@ public class TribalBinderModule extends AbstractModule {
 
     private final Config config;
 
+    private final Game game;
+
     public TribalBinderModule(Tribal tribalPlugin) {
         this.tribalPlugin = tribalPlugin;
+
+        this.game = new Game();
+        requestInjection(game);
+
         //snakeyaml needs this to find Config.class
         Thread.currentThread().setContextClassLoader(tribalPlugin.getClass().getClassLoader());
-
         this.config = Config.YAML.loadAs(tribalPlugin.getConfig().saveToString(), Config.class);
 
     }
@@ -25,8 +31,11 @@ public class TribalBinderModule extends AbstractModule {
     @Override
     protected void configure() {
         this.bind(Tribal.class).toInstance(tribalPlugin);
-        this.bind(Config.class).toProvider(() -> config);
-        this.requestStaticInjection(TribalPlayers.class);
+        this.bind(Config.class).toInstance(config);
+        this.bind(Game.class).toInstance(game);
+
+        this.requestStaticInjection(SavedData.class);
+
     }
 
     public Injector createInjector() {

@@ -2,9 +2,9 @@ package me.bristermitten.tribal;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import me.bristermitten.tribal.data.Tribe;
-import me.bristermitten.tribal.data.Tribes;
 import me.bristermitten.tribal.data.player.TribalPlayers;
+import me.bristermitten.tribal.data.tribes.TribeType;
+import me.bristermitten.tribal.data.tribes.Tribes;
 import me.bristermitten.tribal.inject.TribalBinderModule;
 import me.bristermitten.tribal.io.Config;
 import me.bristermitten.tribal.world.TribalWorldGenerator;
@@ -12,6 +12,8 @@ import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
+
+import static me.bristermitten.tribal.data.player.TribalPlayers.getInstance;
 
 public final class Tribal extends JavaPlugin {
 
@@ -29,17 +31,25 @@ public final class Tribal extends JavaPlugin {
         setupInjection();
 
 
-        Tribe t = new Tribe(Tribes.ASAMAL);
-        TribalPlayers.getInstance().getById("hi");
-        TribalPlayers.getInstance().save();
+        TribalPlayers players = getInstance();
+        players.getById("hi");
+        players.getById("hi2");
+        players.getById("hi3");
+        players.getById("hi4");
+        players.save();
 
+
+        Tribes tribes = Tribes.getInstance();
+        tribes.getByType(TribeType.ASAMAL);
+        tribes.getByType(TribeType.YANRIB);
+        tribes.save();
     }
 
     private void setupInjection() {
         TribalBinderModule binder = new TribalBinderModule(this);
         Injector injector = binder.createInjector();
         injector.injectMembers(this);
-        injector.injectMembers(TribalPlayers.getInstance());
+        injector.injectMembers(getInstance());
     }
 
     @Override
