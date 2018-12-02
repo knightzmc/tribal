@@ -10,6 +10,7 @@ import me.bristermitten.tribal.io.Config;
 import me.bristermitten.tribal.world.TribalWorldGenerator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
+import uk.knightz.knightzapi.KnightzAPI;
 
 import java.util.logging.Level;
 
@@ -27,6 +28,8 @@ public final class Tribal extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        KnightzAPI.dependWebAPI(this);
+
         saveDefaultConfig();
         setupInjection();
 
