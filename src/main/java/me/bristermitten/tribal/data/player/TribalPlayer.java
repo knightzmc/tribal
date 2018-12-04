@@ -23,7 +23,7 @@ public class TribalPlayer {
             leaveTribe(Tribes.getInstance().getByType(tribeId));
 
         this.tribeId = t.getTribeType();
-        t.getMembers().add(this);
+        t.addMember(this);
     }
 
     public void leaveTribe(Tribe t) {

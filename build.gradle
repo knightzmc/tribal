@@ -9,6 +9,7 @@ buildscript {
 
 plugins {
     id 'java'
+    id 'maven'
     id "com.github.johnrengelman.shadow" version "4.0.2"
     id "org.zeroturnaround.gradle.jrebel" version "1.1.8"
 }
@@ -30,6 +31,7 @@ repositories {
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
 }
+
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'

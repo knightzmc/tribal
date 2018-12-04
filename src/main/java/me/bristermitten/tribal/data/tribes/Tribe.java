@@ -28,4 +28,12 @@ public class Tribe {
     public Tribe(TribeType tribeType) {
         this.tribeType = tribeType;
     }
+
+    public Tribe addMember(TribalPlayer tribalPlayer) {
+        if (members.size() == 4) {
+            throw new IndexOutOfBoundsException("Members for tribe " + tribeType + " is full");
+        }
+        members.add(tribalPlayer);
+        return this;
+    }
 }
