@@ -1,5 +1,6 @@
 package me.bristermitten.tribal.data.tribes;
 
+import com.google.common.collect.ImmutableSet;
 import lombok.Data;
 import me.bristermitten.tribal.data.player.TribalPlayer;
 
@@ -13,7 +14,7 @@ public class Tribe {
     public static final Tribe NO_TRIBE = new Tribe(TribeType.NONE);
 
     static {
-        NO_TRIBE.members = new HashSet<>();
+        NO_TRIBE.members = ImmutableSet.of();
         NO_TRIBE.level = -1;
     }
 

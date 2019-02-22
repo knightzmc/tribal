@@ -1,25 +1,19 @@
 package me.bristermitten.tribal;
 
-import com.google.inject.Inject;
+import co.aikar.commands.PaperCommandManager;
 import com.google.inject.Injector;
-import me.bristermitten.tribal.data.player.TribalPlayers;
-import me.bristermitten.tribal.data.tribes.TribeType;
-import me.bristermitten.tribal.data.tribes.Tribes;
+import me.bristermitten.tribal.command.TribalCommand;
+import me.bristermitten.tribal.game.Game;
 import me.bristermitten.tribal.inject.TribalBinderModule;
 import me.bristermitten.tribal.io.Config;
+import me.bristermitten.tribal.io.StorageType;
 import me.bristermitten.tribal.world.TribalWorldGenerator;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
-import uk.knightz.knightzapi.KnightzAPI;
-
-import java.util.logging.Level;
-
-import static me.bristermitten.tribal.data.player.TribalPlayers.getInstance;
 
 public final class Tribal extends JavaPlugin {
 
-
-    @Inject
     private Config config;
 
     public Config config() {
@@ -28,36 +22,34 @@ public final class Tribal extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        KnightzAPI.dependWebAPI(this);
-
         saveDefaultConfig();
-        setupInjection();
 
+        //Snakeyaml needs this to find Config.class
+        Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
+        this.config = StorageType.YAML.load(getConfig().saveToString(), Config.class);
 
-        TribalPlayers players = getInstance();
-        players.getById("hi");
-        players.getById("hi2");
-        players.getById("hi3");
-        players.getById("hi4");
-        players.save();
+        Injector injector = setupInjection();
+        Game.setInstance(injector.getInstance(Game.class));
 
-
-        Tribes tribes = Tribes.getInstance();
-        tribes.getByType(TribeType.ASAMAL);
-        tribes.getByType(TribeType.YANRIB);
-        tribes.save();
+        //register commands
+        PaperCommandManager manager = new PaperCommandManager(this);
+        manager.enableUnstableAPI("help");
+        manager.registerCommand(injector.getInstance(TribalCommand.class));
     }
 
-    private void setupInjection() {
+    private Injector setupInjection() {
         TribalBinderModule binder = new TribalBinderModule(this);
-        Injector injector = binder.createInjector();
-        injector.injectMembers(this);
-        injector.injectMembers(getInstance());
+        return binder.createInjector();
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        try {
+            getConfig().loadFromString(StorageType.YAML.saveToString(config));
+            saveConfig();
+        } catch (InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -66,12 +58,4 @@ public final class Tribal extends JavaPlugin {
         return new TribalWorldGenerator();
     }
 
-    public void debug(String s) {
-        debug(s, Level.INFO);
-    }
-
-    public void debug(String s, Level level) {
-        if (config.isDebug())
-            getLogger().log(level, "[DEBUG] " + s);
-    }
 }

@@ -11,11 +11,11 @@ import java.util.List;
 public class MatchmakingData {
 
     /**
-     * A list of UUIDs of all players who are joining the game. It will always have a size of 100, any players who disconnect won't be removed.
+     * A list of UUIDs of all players who are joining the game but aren't in a party. All of these players + all party players = 100
      */
-    private List<String> allPlayers;
+    private List<String> nonPartiedPlayers;
     /**
-     * A List of Party objects that shows any parties of players. Any players in these parties will also appear in {@link MatchmakingData#allPlayers}
+     * A List of Party objects that shows any parties of players. Any players in these parties won't appear in {@link MatchmakingData#nonPartiedPlayers}
      */
     private List<Party> parties;
 }

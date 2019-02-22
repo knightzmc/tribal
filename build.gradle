@@ -10,45 +10,62 @@ buildscript {
 plugins {
     id 'java'
     id 'maven'
-    id "com.github.johnrengelman.shadow" version "4.0.2"
+    id "com.github.johnrengelman.shadow" version "4.0.4"
     id "org.zeroturnaround.gradle.jrebel" version "1.1.8"
 }
+import org.apache.tools.ant.filters.ReplaceTokens
+
 group = pluginGroup
 version = pluginVersion
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
     mavenCentral()
     mavenLocal()
+    maven { url = "https://repo.aikar.co/content/groups/aikar/" }
+    maven { url = 'https://hub.spigotmc.org/nexus/content/groups/public/' }
+    maven { url = 'https://oss.sonatype.org/content/groups/public/' }
     maven {
-        name = 'spigotmc-repo'
-        url = 'https://hub.spigotmc.org/nexus/content/groups/public/'
-    }
-    maven {
-        name = 'sonatype'
-        url = 'https://oss.sonatype.org/content/groups/public/'
+        url = 'https://maven-repository-232421.appspot.com/repository/maven-snapshots'
+        credentials {
+            username 'user'
+            password 'user'
+        }
     }
 }
 
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation "org.slf4j:slf4j-simple:1.7.21"
+    compileOnly 'uk.knightz:knightzapi:1.1.1-SNAPSHOT'
     compileOnly 'org.spigotmc:spigot-api:1.12-R0.1-SNAPSHOT'
     compile group: 'com.google.inject', name: 'guice', version: '4.0'
+
+    compile "co.aikar:acf-core:0.5.0-SNAPSHOT"
+    compile "co.aikar:acf-paper:0.5.0-SNAPSHOT"
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+
+    //LOMBOK
     compileOnly 'org.projectlombok:lombok:1.18.4'
-
-    compileOnly 'uk.knightz:knightzapinoweb:1.0.12-RELEASE'
+    annotationProcessor 'org.projectlombok:lombok:1.18.4'
 }
-
-import org.apache.tools.ant.filters.ReplaceTokens
 
 processResources {
     from(sourceSets.main.resources.srcDirs) {
         filter ReplaceTokens, tokens: [version: version]
     }
 }
+
+compileJava {
+    options.compilerArgs += ["-parameters"]
+    options.fork = true
+    options.forkOptions.executable = 'javac'
+}
+
+
 shadowJar {
+    relocate 'co.aikar.commands', 'me.bristermitten.tribal.acf'
     minimize()
 }
