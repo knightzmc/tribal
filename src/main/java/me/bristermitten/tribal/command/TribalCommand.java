@@ -12,6 +12,8 @@ import me.bristermitten.tribal.data.locations.GameLocations;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import uk.knightz.knightzapi.menu.adapter.CollectionToMenuAdapter;
+import uk.knightz.knightzapi.menu.adapter.options.Options;
+import uk.knightz.knightzapi.menu.adapter.options.OptionsBuilder;
 
 @CommandAlias("tribal")
 public class TribalCommand extends BaseCommand {
@@ -31,7 +33,8 @@ public class TribalCommand extends BaseCommand {
 
         @Subcommand("locations")
         public void doLocationsCommand(Player p) {
-            new CollectionToMenuAdapter<GameLocation>().adapt(gameLocations.getLocations()).open(p);
+            Options options = new OptionsBuilder().allowSettingValues().build();
+            new CollectionToMenuAdapter<GameLocation>().adapt(gameLocations.getLocations(), options).open(p);
         }
     }
 

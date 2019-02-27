@@ -1,5 +1,6 @@
 package me.bristermitten.tribal.data.locations;
 
+import com.google.gson.Gson;
 import lombok.Data;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

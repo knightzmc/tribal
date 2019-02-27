@@ -9,7 +9,7 @@ import java.io.OutputStreamWriter;
 
 @Slf4j
 public abstract class SavedData {
-    protected transient final StorageType type;
+    private transient final StorageType type;
     private final ManagedFile file;
 
     protected SavedData(File folder, StorageType type, String fileName) {
